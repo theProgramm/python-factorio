@@ -7,6 +7,7 @@ import base64
 import collections
 import json
 import zlib
+import sys
 
 
 class EncodedBlob(object):
@@ -70,6 +71,7 @@ class EncodedBlob(object):
             data["version_byte"] = self.version_byte
         json_str = json.dumps(
             data,
+            indent=4,
             separators=(",", ":"),
             ensure_ascii=False,
             **kwargs
@@ -146,3 +148,11 @@ class BlueprintBook(EncodedBlob):
         for blueprint in self.blueprints:
             blueprint.data["index"] = number
             number = number + 1
+
+def main(argv):
+    b = EncodedBlob.from_exchange_string(argv)
+    print(b.to_json_string())
+
+if __name__ == "__main__":
+    p = sys.argv[1]
+    main(p)
